@@ -3,9 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <title>debounce and throttle</title>
+    <style>
+        button, input {
+            background-color: #52ffcd;
+            margin: 20px;
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+    </style>
 </head>
 <body>
+<div>
+    <button class="hello__world">Hello World</button>
+    <span class="output"></span>
+</div>
+
+<div>
+    <button class="you__are__welcome">You are welcome</button>
+    <span class="output"></span>
+</div>
+
+<div>
+    <button class="seconds">Seconds</button>
+    <span class="output"></span>
+</div>
+<div>
+    <input type="text" class="input__text"><span class="output"></span>
+</div>
+
 <script>
+    const helloWorld = document.querySelector('.hello__world');
+    const youAreWelcome = document.querySelector('.you__are__welcome');
+    const seconds = document.querySelector('.seconds');
+    const input = document.querySelector('.input__text');
+    const output = document.querySelectorAll('.output');
+
+    const outputСonsoleHelloWorld = () => {
+        console.log('Hello World');
+        output[0].innerHTML = 'Hello World'
+    };
+    const outputСonsoleYouAreWelcome = () => {
+        console.log('You are welcome!!!!');
+        output[1].innerHTML = 'You are welcome!!!!'
+        setInterval(() => {
+            output[1].innerHTML = ''
+        }, 2900);
+    };
+    const outputСonsoleSeconds = () => {
+        console.log('There could be your advertisement here.......');
+        output[2].innerHTML = 'There could be your advertisement here.......'
+        setInterval(() => {
+            output[1].innerHTML = ''
+        }, 900);
+    };
+    const outputСonsoleInputText = () => {
+        console.log(input.value);
+        output[3].innerHTML = `${input.value}`
+    };
+
+    helloWorld.addEventListener('click', debounse(outputСonsoleHelloWorld, 5000));
+    youAreWelcome.addEventListener('click', debounseThree(outputСonsoleYouAreWelcome, 3000));
+    seconds.addEventListener('click', debounseThree(outputСonsoleSeconds));
+    input.addEventListener('input', debounse(outputСonsoleInputText, 1000));
+
+    function debounse(callBack, daley) {
+        let timeout;
+        return function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                callBack.apply(this)
+            }, daley);
+        };
+    };
+
+    //====================================================================================
+    //====Это был второй debounse но потом я решил их обьяденить в один с третьим ========
+    /*    function debounseTwo(callBack, daley) {
+            let interval = null;
+            return function () {
+                if (interval === null) {
+                    interval = setInterval(() => {
+                        callBack.apply(this)
+                    }, daley);
+
+                } else {
+                    clearInterval(interval);
+                    interval = null
+                }
+            }
+        };*/
+
+    //====================================================================================
+    function debounseThree(callBack, daley) {
+        let interval = null;
+        return function () {
+            const daleyRandom = Math.ceil(Math.random() * 4);
+            if (interval === null) {
+                if (!daley) {
+                    console.log(`seconds: ${daleyRandom}`);
+                }
+                interval = setInterval(() => {
+                    callBack.apply(this)
+                }, daley ? daley : daleyRandom * 1000);
+            } else {
+                clearInterval(interval);
+                interval = null
+            }
+        }
+    };
+    //==========================================================================================
 
 
 </script>
